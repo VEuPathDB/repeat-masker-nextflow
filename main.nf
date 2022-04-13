@@ -27,6 +27,8 @@ process repeatMasker {
 
 results = output_qch.collectFile(name: 'outFile.seq')
 
+errors = error_qch.collectFile(name: 'error.err')
+
 process publishResults {
     input:
     file 'outFile.seq' from results
@@ -38,7 +40,7 @@ process publishResults {
 
 process publishErrors {
     input:
-    file 'error.err' from from error_qch
+    file 'error.err' from errors
     
     """
     cat error.err > $params.errorFile
