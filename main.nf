@@ -21,7 +21,7 @@ process repeatMasker {
     file 'error.err' into error_qch    
     
     """
-    repeatMasker --rmPath $params.rmPath --seqFile subsetFile.fsa --outFile outfile.seq --errorFile error.err $params.trimDangling --dangleMax $params.dangleMax --rmParamsFile $params.rmParamsFile
+    perl $params.rmPath --seqFile subsetFile.fsa --outFile outfile.seq --errorFile error.err --trimDangling $params.trimDangling --dangleMax $params.dangleMax --rmParamsFile $params.rmParamsFile
     """
 }
 
