@@ -18,6 +18,7 @@ process repeatMasker {
     file 'subsetFile.fa' from subsetFile_qch
     output:
     file 'outFile.seq' into output_qch
+    file 'error.err' into error_qch    
     
     """
     repeatMasker --rmPath $params.rmPath --seqFile subsetFile.fsa --outFile outfile.seq --errorFile error.err $params.trimDangling --dangleMax $params.dangleMax --rmParamsFile $params.rmParamsFile
@@ -26,7 +27,7 @@ process repeatMasker {
 
 results = output_qch.collectFile(name: 'outFile.seq')
 
-process publishResult {
+process publishResults {
     input:
     file 'outFile.seq' from results
     
@@ -34,3 +35,12 @@ process publishResult {
     cat outFile.seq > $params.outFile
     """
 }
+
+process publishErrors {
+    input:
+    file 'error.err' from from error_qch
+    
+    """
+    cat error.err > $params.errorFile
+    """
+}  
