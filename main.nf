@@ -1,6 +1,21 @@
 #!/usr/bin/env nextflow 
 
-seq_qch = Channel.fromPath(inputFile).splitFasta( by:1, file:true  )
+seq_qch = Channel.fromPath(params.inputFile).splitFasta( by:1, file:true  )
+
+//process defineRepeatMaskerPath {
+//    output:
+//    val repeatMaskerPath into rmPath_vch
+//        
+//    script:
+//    if ( params.rmPath == "default" )
+//        """
+//        #!/usr/bin/env perl
+//        my $cmd = 'which repeatMasker';
+//        my $link = readlink($cmd);
+//        return dirname($link);
+//        """
+//
+//}
 
 process splitFastaIntoFiles {
     input:
