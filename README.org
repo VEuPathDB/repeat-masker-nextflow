@@ -1,2 +1,14 @@
-# repeatMasker
-nextflow workflow to modernize current repeatMasker workflow steps
+* repeatMasker
+** A work in progress. What is posted below is not completely functional yet.
+** Get Started
+   + Install Nextflow
+     #+begin_example
+     curl https://get.nextflow.io | bash 
+     #+end_example
+   + Run script
+     #+begin_example
+     nextflow run VEuPathDB/repeatMasker -with-trace -C  <config_file>
+     #+end_example
+** Dependencies
+   + perl
+   + TODO: Find all needed dependencies
