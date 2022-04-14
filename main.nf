@@ -49,7 +49,7 @@ process publishResults {
     file 'outFile.seq' from results
     
     """
-    cat outFile.seq > $params.outFile
+    cat outFile.seq > $params.outputDir/results.txt
     """
 }
 
@@ -58,6 +58,6 @@ process publishErrors {
     file 'error.err' from errors
     
     """
-    cat error.err > $params.errorFile
+    cat error.err > $params.outputDir/error.err
     """
 }  
