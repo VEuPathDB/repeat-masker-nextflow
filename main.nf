@@ -17,20 +17,9 @@ seq_qch = Channel.fromPath(params.inputFile).splitFasta( by:1, file:true  )
 //
 //}
 
-process splitFastaIntoFiles {
-    input:
-    file 'seq.fa' from seq_qch
-    output:
-    file 'subsetFile.fa' into subsetFile_qch
-    shell:
-    """
-    cat seq.fa > subsetFile.fa
-    """
-}
-
 process repeatMasker {
     input:
-    file 'subsetFile.fa' from subsetFile_qch
+    file 'subsetFile.fa' from seq_qch
     output:
     file 'outFile.seq' into output_qch
     file 'error.err' into error_qch    
