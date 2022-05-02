@@ -1,29 +1,39 @@
 #!/usr/bin/env nextflow 
 
-seq_qch = Channel.fromPath(params.inputFile).splitFasta( by:1, file:true  )
+seq_qch = Channel.fromPath(params.inputFilePath).splitFasta( by:1, file:true  )
 
 process repeatMasker {
+    container = 'dfam/tetools'
+
     input:
     file 'subsetFile.fa' from seq_qch
     output:
-    file 'outFile.seq' into output_qch
-    file 'error.err' into error_qch    
-    
+    file 'masked.fa' into masked_qch
+        
     """
-    perl $params.repeatMaskerPath --rmPath $params.rmPath --seqFile subsetFile.fsa --outFile outfile.seq --errorFile error.err --trimDangling $params.trimDangling --dangleMax $params.dangleMax --rmParamsFile $params.rmParamsFile
+    RepeatMasker subsetFile.fa 
+    cat subsetFile.fa.masked > masked.fa
     """
 }
 
-results = output_qch.collectFile(name: 'outFile.seq')
+process cleanSequences {
+    output:
+    file 'cleaned.fa' into cleaned_qch
+    file 'error.err' into error_qch 
+    """
+    perl $params.seqCleanerPath -seqFile $params.inputFilePath --errorFile error.err --trimDangling $params.trimDangling --dangleMax $params.dangleMax --outFile cleaned.fa
+    """
+}
+
+results = cleaned_qch.collectFile(name: 'cleaned.fa')
 
 errors = error_qch.collectFile(name: 'error.err')
 
 process publishResults {
     input:
-    file 'outFile.seq' from results
-    
+    file 'cleaned.fa' from results    
     """
-    cat outFile.seq > $params.outputDir/results.txt
+    cat cleaned.fa > $params.outputDir/output.fa
     """
 }
 
@@ -34,4 +44,4 @@ process publishErrors {
     """
     cat error.err > $params.outputDir/error.err
     """
-}  
+}
