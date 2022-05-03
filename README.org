@@ -1,5 +1,5 @@
 * repeatMasker
-** A work in progress. What is posted below is not completely functional yet.
+** A work in progress.
 ** Get Started
    + Install Nextflow
      #+begin_example
