@@ -2,8 +2,7 @@ nextflow.enable.dsl=1
 seq_qch = Channel.fromPath(params.inputFilePath).splitFasta( by:1, file:true  )
 
 process repeatMasker {
-    container = 'dfam/tetools:latest'
-
+    
     input:
     file 'subsetFile.fa' from seq_qch
     output:
