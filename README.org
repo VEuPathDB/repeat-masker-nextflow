@@ -7,8 +7,7 @@
      #+end_example
    + Run script
      #+begin_example
-     nextflow run VEuPathDB/repeatMasker -with-trace -C  <config_file>
+     nextflow run VEuPathDB/repeatMasker -with-trace -c <config_file>
      #+end_example
 ** Dependencies
    + perl
-   + TODO: Find all needed dependencies
