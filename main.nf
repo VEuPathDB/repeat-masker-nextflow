@@ -28,22 +28,7 @@ process cleanSequences {
     """
 }
 
-results = cleaned_qch.collectFile(name: 'cleaned.fa')
-errors = error_qch.collectFile(name: 'error.err')
+results = cleaned_qch.collectFile(storeDir: params.outputDir)
+errors = error_qch.collectFile(storeDir: params.outputDir)
 
-process publishResults {
-    input:
-    file 'cleaned.fa' from results    
-    """
-    cat cleaned.fa > $params.outputDir/output.fa
-    """
-}
 
-process publishErrors {
-    input:
-    file 'error.err' from errors
-    
-    """
-    cat error.err > $params.outputDir/error.err
-    """
-}
