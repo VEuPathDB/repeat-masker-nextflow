@@ -1,5 +1,5 @@
 * repeatMasker
-** A work in progress. What is posted below is not completely functional yet.
+** A work in progress.
 ** Get Started
    + Install Nextflow
      #+begin_example
@@ -7,8 +7,7 @@
      #+end_example
    + Run script
      #+begin_example
-     nextflow run VEuPathDB/repeatMasker -with-trace -C  <config_file>
+     nextflow run VEuPathDB/repeatMasker -with-trace -c <config_file>
      #+end_example
 ** Dependencies
    + perl
-   + TODO: Find all needed dependencies
