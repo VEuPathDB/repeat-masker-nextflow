@@ -4,13 +4,12 @@ seq_qch = Channel.fromPath(params.inputFilePath).splitFasta( by:1, file:true  )
 process repeatMasker {
     
     input:
-    file 'subsetFile.fa' from seq_qch
+    file 'subset.fa' from seq_qch
     output:
-    file 'masked.fa' into masked_qch
+    file 'subset.fa.masked' into masked_qch
         
     """
-    RepeatMasker subsetFile.fa
-    cat subsetFile.fa.masked > masked.fa 
+    RepeatMasker subset.fa 
     """
 }
 
@@ -21,13 +20,11 @@ process cleanSequences {
     file 'cleaned.fa' into cleaned_qch
     file 'error.err' into error_qch 
     """
-    perl $params.seqCleanerPath -seqFile masked.fa -errorFile errorFile.err -trimDangling $params.trimDangling -dangleMax $params.dangleMax -outFile cleanedFile.fa
-    cat errorFile.err > error.err
-    cat cleanedFile.fa > cleaned.fa
+    seqCleaner.pl -seqFile masked.fa -errorFile error.err -trimDangling $params.trimDangling -dangleMax $params.dangleMax -outFile cleaned.fa
     """
 }
 
-results = cleaned_qch.collectFile(storeDir: params.outputDir)
+results = cleaned_qch.collectFile(storeDir: params.outputDir, name: params.outputFileName)
 errors = error_qch.collectFile(storeDir: params.outputDir)
 
 
