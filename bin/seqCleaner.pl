@@ -47,7 +47,7 @@ foreach my $seq (@qmSeq) {
     my $tmpSeq = $sequence;
     $tmpSeq =~ s/N//g;
   
-    if (length($tmpSeq) > 0) {
+    if (length($tmpSeq) > 50) {
 	print OUT "$seq->[0]", &breakSequence($sequence);
     } else {
 	my $l = length($tmpSeq);
