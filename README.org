@@ -10,4 +10,4 @@
      nextflow run VEuPathDB/repeatMasker -with-trace -c <config_file>
      #+end_example
 ** Dependencies
-   + perl
+   + 
