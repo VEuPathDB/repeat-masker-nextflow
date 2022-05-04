@@ -8,6 +8,7 @@
    + Clone Repository
      #+begin_example
      git clone git@github.com:VEuPathDB/repeatMasker.git
+     #+end_example
    + Run script
      #+begin_example
      nextflow main.nf -c nextflow.config
