@@ -5,9 +5,12 @@
      #+begin_example
      curl https://get.nextflow.io | bash 
      #+end_example
+   + Clone Repository
+     #+begin_example
+     git clone git@github.com:VEuPathDB/repeatMasker.git
    + Run script
      #+begin_example
-     nextflow run VEuPathDB/repeatMasker -with-trace -c <config_file>
+     nextflow main.nf -c nextflow.config
      #+end_example
 ** Dependencies
    + 
