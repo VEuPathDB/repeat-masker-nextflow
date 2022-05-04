@@ -101,14 +101,14 @@ sub trimDanglingNNN {
 
   # reverse strand (only bother if there are and NNNs left)
     if ($seq =~ /N/) {
-	my $rev = &reverseComplementSequence($seq);
+	my $rev = &reverseSequence($seq);
 	$mightNeedTrimming = 1;
 	while($mightNeedTrimming) {
 	    ($rev, $mightNeedTrimming) = &trimDanglingNNN_sub($rev);
 	}
     # don't bother unreversing if not changed
 	if (length($rev) != length($seq)) {
-	    $seq = &reverseComplementSequence($rev);
+	    $seq = &reverseSequence($rev);
 	}
     }
     return $seq;
@@ -129,28 +129,11 @@ sub trimDanglingNNN_sub {
     return ($seq, $trimmed);
 }
 
-sub reverseComplementSequence{ ##for reverseComplementing sequences
+sub reverseSequence{
     my($seq) = @_;
     $seq =~ s/\s//g;
-    my $revcompseq = "";
     my $revseq = reverse $seq;
     my @revseq = split('', $revseq);
-    foreach my $nuc (@revseq) {
-	$revcompseq .= &compNuc($nuc);
-    }
-    return $revcompseq;
+    return $revseq;
 }
 
-sub compNuc{
-    my($nuc) = @_;
-    if ($nuc =~ /A/i) {
-	return "T";
-    } elsif ($nuc =~ /T/i) {
-	return "A";
-    } elsif ($nuc =~ /C/i) {
-	return "G";
-    } elsif ($nuc =~ /G/i) {
-	return "C";
-    }
-    return $nuc;
-}
