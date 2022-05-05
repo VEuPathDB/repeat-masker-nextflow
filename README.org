@@ -1,17 +1,11 @@
 * repeatMasker
-** A work in progress.
+
 ** Get Started
    + Install Nextflow
      #+begin_example
      curl https://get.nextflow.io | bash 
      #+end_example
-   + Clone Repository
+   + Run the script
      #+begin_example
-     git clone git@github.com:VEuPathDB/repeatMasker.git
+     nextflow run VEuPathDB/repeatMasker -with-trace -c  <config_file>
      #+end_example
-   + Run script
-     #+begin_example
-     nextflow main.nf -c nextflow.config
-     #+end_example
-** Dependencies
-   + 
