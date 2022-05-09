@@ -3,7 +3,6 @@ seq_qch = Channel.fromPath(params.inputFilePath).splitFasta( by:1, file:true  )
 
 process repeatMasker {
     cpus params.processorsPerNode
-    memory params.maxMemoryGigs
     input:
     path 'subset.fa' from seq_qch
     output:
