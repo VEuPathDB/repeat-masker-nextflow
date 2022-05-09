@@ -9,7 +9,7 @@ process repeatMasker {
     path 'subset.fa.masked' into masked_qch
         
     """
-    RepeatMasker $params.rmParams subset.fa 
+    RepeatMasker -species $params.speciesName subset.fa 
     """
 }
 
