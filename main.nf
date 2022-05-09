@@ -2,14 +2,15 @@ nextflow.enable.dsl=1
 seq_qch = Channel.fromPath(params.inputFilePath).splitFasta( by:1, file:true  )
 
 process repeatMasker {
-    
+    cpus params.processorsPerNode
+    memory params.maxMemoryGigs
     input:
     path 'subset.fa' from seq_qch
     output:
     path 'subset.fa.masked' into masked_qch
         
     """
-    RepeatMasker -species $params.speciesName subset.fa 
+    RepeatMasker subset.fa 
     """
 }
 
