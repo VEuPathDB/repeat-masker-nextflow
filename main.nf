@@ -13,7 +13,7 @@ process repeatMasker {
 }
 
 process cleanSequences {
-    publishDir params.outputDir, mode: 'copy'
+    publishDir params.outputDir, mode: 'copy', saveAs: {filename -> filename.endsWith(".fa") ? params.outputFileName : filename }
     input:
     path 'masked.fa'
     output:
