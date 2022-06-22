@@ -1,12 +1,11 @@
-nextflow.enable.dsl=1
-seq_qch = Channel.fromPath(params.inputFilePath).splitFasta( by:1, file:true  )
+nextflow.enable.dsl=2
 
 process repeatMasker {
     cpus params.processorsPerNode
     input:
-    path 'subset.fa' from seq_qch
+    path 'subset.fa'
     output:
-    path 'subset.fa.masked' into masked_qch
+    path 'subset.fa.masked'
         
     """
     RepeatMasker subset.fa 
@@ -14,17 +13,17 @@ process repeatMasker {
 }
 
 process cleanSequences {
+    publishDir params.outputDir, mode: 'copy'
     input:
-    path 'masked.fa' from masked_qch
+    path 'masked.fa'
     output:
-    path 'cleaned.fa' into cleaned_qch
-    path 'error.err' into error_qch 
+    path 'cleaned.fa'
+    path 'error.err' 
     """
     seqCleaner.pl -seqFile masked.fa -errorFile error.err -trimDangling $params.trimDangling -dangleMax $params.dangleMax -outFile cleaned.fa
     """
 }
 
-results = cleaned_qch.collectFile(storeDir: params.outputDir, name: params.outputFileName)
-errors = error_qch.collectFile(storeDir: params.outputDir)
-
-
+workflow {
+  channel.fromPath(params.inputFilePath).splitFasta(by:1, file:true) | repeatMasker | cleanSequences
+}
