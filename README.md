@@ -9,12 +9,14 @@
     
     `nextflow run VEuPathDB/tRNAScan -with-trace -c  <config_file> -r main`
 
-###Decription of nextflow configuration parameters:
+### Description of nextflow configuration parameters:
 1. **inputFilePath**: Path to the input fasta file
 2. **trimDangling**: 'true' or 'false', would you like to remove sections of masked repeats or not
 3. **dangleMax**: Integer, number of nucleotides required between sections of repeats to stop removal process. 
-  **Explained**: The trimDangling process will move through a masked sequence, once from the forward and once from the reverse directions, while looking for sections of 9 or more 'N's. dangleMax specifies the minimum number of nucleotides required to halt this process. Once this is done in the forward direction, it will begin in the reverse.
-  **Example**:
+  
+  - **Explained**: The trimDangling process will move through a masked sequence, once from the forward and once from the reverse directions, while looking for sections of 9 or more 'N's. dangleMax specifies the minimum number of nucleotides required to halt this process. Once this is done in the forward direction, it will begin in the reverse.
+
+  - **Example**:
           
           If dangleMax was set to 9...
           AAAAAANNNNNNNNNAAANNNNNNNNNAAAAAAAAANNNNNNNNNNNNAAAAAAAAAAAAAAANNNNNNAAAAAAAAANNNNNNNNNAAAAAANNNNNNNNNAAAAAA
