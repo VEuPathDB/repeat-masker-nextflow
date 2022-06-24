@@ -1,4 +1,4 @@
-# Nextflow Conversion of tRNAScanTask.pm
+# Nextflow Conversion of repeatMaskerTask.pm
 
 ### Get Started
   * Install Nextflow
