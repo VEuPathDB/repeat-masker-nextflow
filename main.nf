@@ -30,5 +30,5 @@ process cleanSequences {
 }
 
 workflow {
-  channel.fromPath(params.inputFilePath).splitFasta(by:1, file:true) | repeatMasker | cleanSequences
+  channel.fromPath(params.inputFilePath).splitFasta(by: params.numberOfSplits, file:true) | repeatMasker | cleanSequences
 }
