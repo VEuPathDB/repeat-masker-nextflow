@@ -17,19 +17,8 @@ open(ERR, ">$errorFile") || die "Could not open error file $errorFile";
 select ERR; $| = 1;
 select STDOUT;
 $| = 1;
-
-my %fin;
-if(-e "$outFile"){  #3restarting...
-    open(R, "$outFile") || die "Could not open outFile $outFile";
-    while(<R>){
-	if(/^\>(\S+)/){
-	    $fin{$1} = 1;
-	}
-    }
-    close R;
-}
   
-open(OUT, ">$outFile") || die "Could not open outFile $outfile";
+open(OUT, ">$outFile") || die "Could not open outFile $outFile";
 
 my $tmpSeq = "";
 my $miniLib = "";
