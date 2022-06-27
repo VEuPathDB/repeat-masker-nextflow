@@ -11,16 +11,16 @@ my($inFile,$outFile,$errFile,$trimDangling,$dangleMax,$paramFile);
             'trimDangling!' => \$trimDangling,
             'dangleMax=i' => \$dangleMax);
 
-my $errorFile = $errFile ? $errFile : ">blockLib_error.log";
+my $errorFile = $errFile ? $errFile : "error.log";
 
-open(ERR, ">$errorFile");
+open(ERR, ">$errorFile") || die "Could not open error file $errorFile";
 select ERR; $| = 1;
 select STDOUT;
 $| = 1;
 
 my %fin;
 if(-e "$outFile"){  #3restarting...
-    open(R, "$outFile");
+    open(R, "$outFile") || die "Could not open outFile $outFile";
     while(<R>){
 	if(/^\>(\S+)/){
 	    $fin{$1} = 1;
@@ -29,7 +29,7 @@ if(-e "$outFile"){  #3restarting...
     close R;
 }
   
-open(OUT, ">$outFile");
+open(OUT, ">$outFile") || die "Could not open outFile $outfile";
 
 my $tmpSeq = "";
 my $miniLib = "";
