@@ -1,8 +1,6 @@
 nextflow.enable.dsl=2
 
 process repeatMasker {
-    cpus params.processorsPerNode
-
     input:
     path 'subset.fa'
 
