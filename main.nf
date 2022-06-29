@@ -28,5 +28,8 @@ process cleanSequences {
 }
 
 workflow {
-  channel.fromPath(params.inputFilePath).splitFasta(by: params.fastaSubsetSize, file:true) | repeatMasker | cleanSequences
+  masked = channel.fromPath(params.inputFilePath).splitFasta(by: params.fastaSubsetSize, file:true) | repeatMasker
+  results = cleanSequences(masked)
+  results[0] | collectFile(storeDir: params.outputDir, name: params.outputFileName)
+  results[1] | collectFile(storeDir: params.outputDir)
 }
