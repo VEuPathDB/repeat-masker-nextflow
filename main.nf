@@ -21,7 +21,7 @@ process cleanSequences {
     path 'error.err' 
 
     """
-    seqCleaner.pl -seqFile masked.fa -errorFile error.err -trimDangling $params.trimDangling -dangleMax $params.dangleMax -outFile cleaned.fa
+    seqCleaner.pl -seqFile masked.fa -errorFile error.err -trimDangling $params.trimDangling -dangleMax $params.dangleMax -outFile cleaned.fa $params.rmParams
     """
 }
 
@@ -29,5 +29,5 @@ workflow {
   masked = channel.fromPath(params.inputFilePath).splitFasta(by: params.fastaSubsetSize, file:true) | repeatMasker
   results = cleanSequences(masked)
   results[0] | collectFile(storeDir: params.outputDir, name: params.outputFileName)
-  results[1] | collectFile(storeDir: params.outputDir)
+  results[1] | collectFile(storeDir: params.outputDir, name: params.errorFileName)
 }
