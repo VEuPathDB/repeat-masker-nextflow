@@ -20,8 +20,14 @@ process cleanSequences {
     path 'cleaned.fa'
     path 'error.err' 
 
+    script:
+    if (params.trimDangling)
     """
     seqCleaner.pl -seqFile masked.fa -errorFile error.err -trimDangling $params.trimDangling -dangleMax $params.dangleMax -outFile cleaned.fa $params.rmParams
+    """
+    else
+    """
+    seqCleaner.pl -seqFile masked.fa -errorFile error.err -dangleMax $params.dangleMax -outFile cleaned.fa $params.rmParams
     """
 }
 
