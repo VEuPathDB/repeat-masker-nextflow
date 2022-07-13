@@ -17,8 +17,8 @@ process cleanSequences {
     path 'masked.fa'
 
     output:
-    path 'cleaned.fa'
-    path 'error.err' 
+    path 'cleaned.fa' optional true
+    path 'error.err' optional true
 
     script:
     if (params.trimDangling)
