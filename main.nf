@@ -8,7 +8,7 @@ process repeatMasker {
     path 'subset.fa.masked'        
 
     """
-    RepeatMasker subset.fa 
+    RepeatMasker $params.rmParams subset.fa -dir .
     """
 }
 
@@ -23,11 +23,11 @@ process cleanSequences {
     script:
     if (params.trimDangling)
     """
-    seqCleaner.pl -seqFile masked.fa -errorFile error.err -trimDangling $params.trimDangling -dangleMax $params.dangleMax -outFile cleaned.fa $params.rmParams
+    seqCleaner.pl -seqFile masked.fa -errorFile error.err -trimDangling $params.trimDangling -dangleMax $params.dangleMax -outFile cleaned.fa 
     """
     else
     """
-    seqCleaner.pl -seqFile masked.fa -errorFile error.err -dangleMax $params.dangleMax -outFile cleaned.fa $params.rmParams
+    seqCleaner.pl -seqFile masked.fa -errorFile error.err -dangleMax $params.dangleMax -outFile cleaned.fa 
     """
 }
 
