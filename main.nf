@@ -5,7 +5,7 @@ process repeatMasker {
     path 'subset.fa'
 
     output:
-    path 'subset.fa.masked'        
+    path 'subset.fa.masked' optional true        
 
     """
     RepeatMasker $params.rmParams subset.fa -dir .
@@ -17,17 +17,26 @@ process cleanSequences {
     path 'masked.fa'
 
     output:
-    path 'cleaned.fa' optional true
-    path 'error.err' optional true
+    path 'cleaned.fa' 
+    path 'error.err' 
 
     script:
     if (params.trimDangling)
     """
-    seqCleaner.pl -seqFile masked.fa -errorFile error.err -trimDangling $params.trimDangling -dangleMax $params.dangleMax -outFile cleaned.fa 
+    seqCleaner.pl \
+      -seqFile masked.fa \
+      -errorFile error.err \
+      -trimDangling $params.trimDangling \
+      -dangleMax $params.dangleMax \
+      -outFile cleaned.fa 
     """
     else
     """
-    seqCleaner.pl -seqFile masked.fa -errorFile error.err -dangleMax $params.dangleMax -outFile cleaned.fa 
+    seqCleaner.pl \
+      -seqFile masked.fa \
+      -errorFile error.err \
+      -dangleMax $params.dangleMax \
+      -outFile cleaned.fa 
     """
 }
 
