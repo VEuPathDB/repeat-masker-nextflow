@@ -5,10 +5,14 @@ process repeatMasker {
     path 'subset.fa'
 
     output:
-    path 'subset.fa.masked' optional true        
+    path 'subset.fa.masked'         
 
     """
     RepeatMasker $params.rmParams subset.fa -dir .
+    if ! [-f "subset.fa.masked"]
+    then
+      mv subset.fa subset.fa.masked
+    fi
     """
 }
 
