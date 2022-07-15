@@ -7,7 +7,7 @@ RUN apt-get -qq update --fix-missing
 RUN apt-get install -y \
   cpanminus \
   bioperl \
-  bioperl-run
+  bioperl-run 
 
 COPY ./bin/seqCleaner.pl /usr/local/bin/seqCleaner.pl
 
