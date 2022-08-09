@@ -1,49 +1,52 @@
 nextflow.enable.dsl=2
 
+
 process repeatMasker {
-    input:
+  input:
     path 'subset.fa'
 
-    output:
+  output:
     path 'subset.fa.masked'         
 
-    """
-    export LIBDIR=$params.libraryPath
-    RepeatMasker $params.rmParams subset.fa -dir .
-    if ! [-f "subset.fa.masked"]
-    then
-      mv subset.fa subset.fa.masked
-    fi
-    """
+  """
+  export LIBDIR=$params.libraryPath
+  RepeatMasker $params.rmParams subset.fa -dir .
+  if ! [-f "subset.fa.masked"]
+  then
+    mv subset.fa subset.fa.masked
+  fi
+  """
 }
 
+
 process cleanSequences {
-    input:
+  input:
     path 'masked.fa'
 
-    output:
+  output:
     path 'cleaned.fa' 
     path 'error.err' 
 
-    script:
+  script:
     if (params.trimDangling)
-    """
-    seqCleaner.pl \
-      -seqFile masked.fa \
-      -errorFile error.err \
-      -trimDangling $params.trimDangling \
-      -dangleMax $params.dangleMax \
-      -outFile cleaned.fa 
-    """
+      """
+      seqCleaner.pl \
+        -seqFile masked.fa \
+        -errorFile error.err \
+        -trimDangling $params.trimDangling \
+        -dangleMax $params.dangleMax \
+        -outFile cleaned.fa 
+      """
     else
-    """
-    seqCleaner.pl \
-      -seqFile masked.fa \
-      -errorFile error.err \
-      -dangleMax $params.dangleMax \
-      -outFile cleaned.fa 
-    """
+      """
+      seqCleaner.pl \
+        -seqFile masked.fa \
+        -errorFile error.err \
+        -dangleMax $params.dangleMax \
+        -outFile cleaned.fa 
+      """
 }
+
 
 workflow {
   masked = channel.fromPath(params.inputFilePath).splitFasta(by: params.fastaSubsetSize, file:true) | repeatMasker
