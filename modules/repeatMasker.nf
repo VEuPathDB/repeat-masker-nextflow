@@ -33,7 +33,9 @@ process cleanSequences {
 workflow repeatMasker {
   take:
     seqs
+
   main:
+
     masked = runRepeatMasker(seqs)
     results = cleanSequences(masked)
     results[0] | collectFile(storeDir: params.outputDir, name: params.outputFileName)
