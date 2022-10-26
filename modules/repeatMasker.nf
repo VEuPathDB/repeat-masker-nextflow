@@ -19,8 +19,8 @@ process cleanSequences {
     path 'masked.fa'
 
   output:
-    path 'cleaned.fa' 
-    path 'error.err' 
+    path 'cleaned.fa', emit: fasta 
+    path 'error.err', emit: error
 
   script:
     if (params.trimDangling)
@@ -38,6 +38,7 @@ workflow repeatMasker {
 
     masked = runRepeatMasker(seqs)
     results = cleanSequences(masked)
-    results[0] | collectFile(storeDir: params.outputDir, name: params.outputFileName)
-    results[1] | collectFile(storeDir: params.outputDir, name: params.errorFileName)
+    results.fasta | collectFile(storeDir: params.outputDir, name: params.outputFileName)
+    results.error | collectFile(storeDir: params.outputDir, name: params.errorFileName)
+    
 }
