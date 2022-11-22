@@ -1,5 +1,25 @@
 # Nextflow Conversion of repeatMaskerTask.pm
 
+***<p align=center>RepeatMasker</p>***  
+```mermaid
+flowchart TD
+    p0((Channel.fromPath))
+    p1([splitFasta])
+    p2[repeatMasker:runRepeatMasker]
+    p3[repeatMasker:cleanSequences]
+    p4([collectFile])
+    p5(( ))
+    p6([collectFile])
+    p7(( ))
+    p0 --> p1
+    p1 -->|seqs| p2
+    p2 --> p3
+    p3 --> p4
+    p3 --> p6
+    p4 --> p5
+    p6 --> p7
+```
+
 ### Get Started
   * Install Nextflow
     
