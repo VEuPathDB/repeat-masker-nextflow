@@ -2,7 +2,7 @@
 
 set -euo pipefail
 seqCleaner.pl \
-  -seqFile masked.fa \
+  -seqFile $maskedFasta \
   -errorFile error.err \
   -dangleMax $params.dangleMax \
   -outFile cleaned.fa 

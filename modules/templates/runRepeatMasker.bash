@@ -2,8 +2,8 @@
 
 set -euo pipefail
 export LIBDIR=$params.libraryPath
-RepeatMasker $params.rmParams subset.fa -dir .
+RepeatMasker $params.rmParams $subsetFasta -dir .
 if ! [-f "subset.fa.masked"]
 then
-  mv subset.fa subset.fa.masked
+  mv $subsetFasta subset.fa.masked
 fi
