@@ -4,7 +4,7 @@ nextflow.enable.dsl=2
 
 process runRepeatMasker {
   input:
-    path 'subsetFasta'
+    path subsetFasta
 
   output:
     path 'subset.fa.masked'         
@@ -16,7 +16,7 @@ process runRepeatMasker {
 
 process cleanSequences {
   input:
-    path 'maskedFasta'
+    path maskedFasta
 
   output:
     path 'cleaned.fa', emit: fasta 
