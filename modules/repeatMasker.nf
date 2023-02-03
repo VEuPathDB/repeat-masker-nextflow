@@ -17,16 +17,14 @@ process runRepeatMasker {
 process cleanSequences {
   input:
     path maskedFasta
+    val trimDangling
 
   output:
     path 'cleaned.fa', emit: fasta 
     path 'error.err', emit: error
 
   script:
-    if (params.trimDangling)
-      template 'cleanSeqTrim.bash'
-    else
-      template 'cleanSeqNoTrim.bash'
+    template 'cleanSeq.bash'
 }
 
 
@@ -37,7 +35,7 @@ workflow repeatMasker {
   main:
 
     masked = runRepeatMasker(seqs)
-    results = cleanSequences(masked)
+    results = cleanSequences(masked, params.trimDangling)
     results.fasta | collectFile(storeDir: params.outputDir, name: params.outputFileName)
     results.error | collectFile(storeDir: params.outputDir, name: params.errorFileName)
     
