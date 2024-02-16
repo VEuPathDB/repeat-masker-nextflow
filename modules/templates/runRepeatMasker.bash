@@ -3,7 +3,8 @@
 set -euo pipefail
 export LIBDIR=/opt/RepeatMasker/Libraries
 RepeatMasker $params.rmParams $subsetFasta -dir .
-if ! [-f "subset.fa.masked"]
+expectedMaskedFile=${subsetFasta}.masked
+if ! [-f \$expectedMaskedFile ]
 then
-  mv $subsetFasta subset.fa.masked
+  mv $subsetFasta expectedMaskedFile
 fi
