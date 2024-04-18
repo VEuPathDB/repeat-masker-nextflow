@@ -7,7 +7,7 @@ process runRepeatMasker {
     path subsetFasta
 
   output:
-    path 'subset.fa.masked'         
+    path '*.masked'         
 
   script:
     template 'runRepeatMasker.bash'
