@@ -1,4 +1,4 @@
-FROM dfam/tetools:1.5
+FROM dfam/tetools:1.88.5
 
 MAINTAINER rdemko2332@gmail.com
 
