@@ -9,12 +9,8 @@ if(!params.fastaSubsetSize) {
   throw new Exception("Missing params.fastaSubsetSize")
 }
 
-if(params.inputFilePath) {
-  seqs = Channel.fromPath( params.inputFilePath )
-           .splitFasta( by:params.fastaSubsetSize, file:true  )
-}
-else {
-  throw new Exception("Missing params.seqFile")
+if(!params.inputFilePath) {
+  throw new Exception("Missing params.seqFile")  
 }
 
 //--------------------------------------------------------------------------
@@ -28,5 +24,5 @@ include { repeatMasker } from './modules/repeatMasker.nf'
 //--------------------------------------------------------------------------
 
 workflow {
-  repeatMasker(seqs)
+  repeatMasker(params.inputFilePath)
 }

@@ -28,7 +28,8 @@ RUN apt-get -qq install -y \
   vim nano \
   procps strace \
   libpam-systemd- \
-  python3-setuptools
+  python3-setuptools \
+  ll
 
 WORKDIR /opt
 
@@ -52,6 +53,7 @@ RUN cd /opt \
 
 COPY ./bin/seqCleaner.pl /usr/local/bin/seqCleaner.pl
 COPY ./bin/configure /opt/RepeatMasker/configure
+COPY ./bin/RepeatMaskerConfig.pm /opt/RepeatMasker/RepeatMaskerConfig.pm
 
 RUN chmod +x /usr/local/bin/seqCleaner.pl
 
