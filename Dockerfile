@@ -28,8 +28,7 @@ RUN apt-get -qq install -y \
   vim nano \
   procps strace \
   libpam-systemd- \
-  python3-setuptools \
-  ll
+  python3-setuptools
 
 WORKDIR /opt
 
