@@ -6,7 +6,8 @@ process runRepeatMasker {
     path subsetFasta
 
   output:
-    path '*.masked'         
+    path '*.masked', emit: mask
+    path '*.bed', emit: bed
 
   script:
     template 'runRepeatMasker.bash'
@@ -25,6 +26,27 @@ process cleanSequences {
     template 'cleanSeq.bash'
 }
 
+process indexResults {
+  container = 'biocontainers/tabix:v1.9-11-deb_cv1'
+
+  publishDir params.outputDir, mode: 'copy'
+
+  input:
+    path bed
+    val outputFileName
+
+  output:
+    path '*.bed.gz'
+    path '*.tbi'
+
+  script:
+  """
+  sort -k1,1 -k2,2n $bed > ${outputFileName}
+  bgzip ${outputFileName}
+  tabix -p bed ${outputFileName}.gz
+  """
+}
+
 workflow repeatMasker {
   take:
     inputFile
@@ -33,7 +55,8 @@ workflow repeatMasker {
     seqs = Channel.fromPath( params.inputFilePath)
            .splitFasta( by:params.fastaSubsetSize, file:true  )
     masked = runRepeatMasker(seqs)
-    results = cleanSequences(masked, params.trimDangling)
+    indexed = indexResults(masked.bed.collectFile(), params.outputFileName+".bed")
+    results = cleanSequences(masked.mask, params.trimDangling)
     results.fasta | collectFile(storeDir: params.outputDir, name: params.outputFileName)
     results.error | collectFile(storeDir: params.outputDir, name: params.errorFileName)
 }
