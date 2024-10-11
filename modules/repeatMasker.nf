@@ -38,12 +38,15 @@ process indexResults {
   output:
     path '*.bed.gz'
     path '*.tbi'
+    path '*.bed'    
 
   script:
   """
   sort -k1,1 -k2,2n $bed > ${outputFileName}
+  cp ${outputFileName} ${outputFileName}.tmp
   bgzip ${outputFileName}
   tabix -p bed ${outputFileName}.gz
+  mv ${outputFileName}.tmp ${outputFileName}
   """
 }
 
