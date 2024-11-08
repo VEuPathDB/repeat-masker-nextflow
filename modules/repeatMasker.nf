@@ -2,6 +2,7 @@
 nextflow.enable.dsl=2
 
 process runRepeatMasker {
+  container = 'veupathdb/repeatmasker'
   input:
     path subsetFasta
 
@@ -14,6 +15,7 @@ process runRepeatMasker {
 }
 
 process cleanSequences {
+ container = 'veupathdb/repeatmasker'
   input:
     path maskedFasta
     val trimDangling
