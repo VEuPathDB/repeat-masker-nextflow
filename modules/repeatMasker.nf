@@ -1,10 +1,43 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
+process runEDirect {
+  container = 'veupathdb/edirect'
+  input:
+    val taxonId
+
+  output:
+    path 'taxonIds.txt'
+
+  script:
+    """
+    efetch -db taxonomy -id 5833 -format xml \
+    | xtract -pattern Taxon -block LineageEx -sep "\n" -element TaxId > taxonIds.txt
+    echo "$taxonId" >> taxonIds.txt
+    """
+}
+
+process findBestTaxonId {
+  container = 'veupathdb/repeatmasker'
+  input:
+    path taxonIds
+
+  output:
+    env bestTaxon
+
+  script:
+    """
+    tac $taxonIds > flipped.txt
+    cat flipped.txt | while read line; do famdb.py names "\$line" > temp.txt; done
+    export bestTaxon=5833
+    """
+}
+
 process runRepeatMasker {
   container = 'veupathdb/repeatmasker'
   input:
     path subsetFasta
+    val bestTaxon
 
   output:
     path '*.masked', emit: mask
@@ -55,8 +88,10 @@ workflow repeatMasker {
 
   main:
     seqs = Channel.fromPath( params.inputFilePath)
-           .splitFasta( by:params.fastaSubsetSize, file:true  )
-    masked = runRepeatMasker(seqs)
+           .splitFasta( by:params.fastaSubsetSize, file:true )
+    taxonId = runEDirect(params.taxonId)
+    bestTaxon = findBestTaxonId(taxonId)
+    masked = runRepeatMasker(seqs, bestTaxon)
     indexed = indexResults(masked.bed.collectFile(), params.outputFileName+".bed")
     results = cleanSequences(masked.mask, params.trimDangling)
     results.fasta | collectFile(storeDir: params.outputDir, name: params.outputFileName)
