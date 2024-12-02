@@ -28,8 +28,14 @@ process findBestTaxonId {
   script:
     """
     tac $taxonIds > flipped.txt
-    cat flipped.txt | while read line; do famdb.py names "\$line" > temp.txt; done
-    export bestTaxon=5833
+    cat flipped.txt | while read line; do
+      famdb.py names "\$line" >> temp.txt
+      if grep -q "Exact Matches" temp.txt; then
+        echo "\$line" > bestTaxon.txt
+      	break
+      fi
+    done
+    export bestTaxon=\$(cat bestTaxon.txt)
     """
 }
 
