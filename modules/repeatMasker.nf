@@ -11,7 +11,7 @@ process runEDirect {
 
   script:
     """
-    efetch -db taxonomy -id 5833 -format xml \
+    efetch -db taxonomy -id $taxonId -format xml \
     | xtract -pattern Taxon -block LineageEx -sep "\n" -element TaxId > taxonIds.txt
     echo "$taxonId" >> taxonIds.txt
     """
