@@ -91,7 +91,7 @@ workflow repeatMasker {
     inputFile
 
   main:
-    seqs = Channel.fromPath(params.inputFilePath).splitFasta( by:1, file:true )
+    seqs = Channel.fromPath(params.inputFilePath).splitFasta( by:params.fastaSubsetSize, file:true )
  
     taxonId = runEDirect(params.taxonId)
     bestTaxon = findBestTaxonId(taxonId)
