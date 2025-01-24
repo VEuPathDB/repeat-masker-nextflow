@@ -70,15 +70,13 @@ process cleanSequences {
 process indexResults {
   container = 'biocontainers/tabix:v1.9-11-deb_cv1'
 
-  publishDir params.outputDir, mode: 'copy'
-
   input:
     path bed
     val outputFileName
 
-output:
-    path '*.bed.gz'
-    path '*.tbi'
+  output:
+    path '*.bed.gz', emit: bed
+    path '*.tbi', emit: tbi
 
   script:
   """
@@ -93,12 +91,17 @@ workflow repeatMasker {
     inputFile
 
   main:
-    seqs = Channel.fromPath( params.inputFilePath)
-           .splitFasta( by:params.fastaSubsetSize, file:true )
+    seqs = Channel.fromPath(params.inputFilePath).splitFasta( by:1, file:true )
+ 
     taxonId = runEDirect(params.taxonId)
     bestTaxon = findBestTaxonId(taxonId)
     masked = runRepeatMasker(seqs, bestTaxon)
-    indexed = indexResults(masked.bed.collectFile(), params.outputFileName+".bed")
+
+    index = indexResults(masked.bed, params.outputFileName+".bed")
+
+    index.bed.collectFile(storeDir: params.outputDir)
+    index.tbi.collectFile(storeDir: params.outputDir)
+
     results = cleanSequences(masked.mask, params.trimDangling)
     results.fasta | collectFile(storeDir: params.outputDir, name: params.outputFileName)
     results.error | collectFile(storeDir: params.outputDir, name: params.errorFileName)
