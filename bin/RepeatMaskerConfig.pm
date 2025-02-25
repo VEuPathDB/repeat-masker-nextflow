@@ -97,7 +97,7 @@ BEGIN {
                            'expected_files' => [],
                            'param_type' => 'directory',
                            'required' => 0,
-                           'value' => '/opt/hmmer/bin'
+                           'value' => ''
                          },
           'LIBDIR' => {
                         'command_line_override' => 'libdir',
@@ -111,7 +111,7 @@ BEGIN {
                                             ],
                         'param_type' => 'directory',
                         'required' => 0,
-                        'value' => '/opt/RepeatMasker/Libraries/'
+                        'value' => '/opt/RepeatMasker/Libraries'
                       },
           'RMBLAST_DIR' => {
                              'command_line_override' => 'rmblast_dir',
@@ -153,7 +153,7 @@ BEGIN {
 #
 # Current version of the software
 #
-$VERSION = "4.1.6";
+$VERSION = "4.1.7-p1";
 
 #
 # Default Dfam Version
