@@ -91,8 +91,10 @@ workflow repeatMasker {
     inputFile
 
   main:
-    seqs = Channel.fromPath(params.inputFilePath).splitFasta( by:params.fastaSubsetSize, file:true )
- 
+    seqs = Channel.fromPath(params.inputFilePath).flatMap { fraction = it.countFasta() / params.subsetFractionDenominator
+                                                            it.splitFasta(by: fraction.toInteger(), file: true);
+							  }
+
     taxonId = runEDirect(params.taxonId)
     bestTaxon = findBestTaxonId(taxonId)
     masked = runRepeatMasker(seqs, bestTaxon)
