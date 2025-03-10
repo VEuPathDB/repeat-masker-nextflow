@@ -5,8 +5,8 @@ nextflow.enable.dsl=2
 // Param Checking
 //--------------------------------------------------------------------------
 
-if(!params.fastaSubsetSize) {
-  throw new Exception("Missing params.fastaSubsetSize")
+if(!params.subsetFractionDenominator) {
+  throw new Exception("Missing params.subsetFractionDenominator")
 }
 
 if(!params.inputFilePath) {
