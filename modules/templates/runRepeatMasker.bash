@@ -1,10 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
-RepeatMasker $params.rmParams -species $bestTaxon $subsetFasta -dir . -gff
-expectedMaskedFile=${subsetFasta}.masked
-if [ ! -f \$expectedMaskedFile ]; then
-    mv $subsetFasta \$expectedMaskedFile
+
+updateDefline.pl \
+        --inFasta $subsetFasta \
+        --mappingFile mapping.tsv \
+        --newFasta updatedFasta.fa \
+
+RepeatMasker $params.rmParams -species $bestTaxon updatedFasta.fa -dir . -gff
+
+if [ ! -f updatedFasta.fa.masked ]; then
+    mv $subsetFasta ${subsetFasta}.masked
     touch ${subsetFasta}.out.gff
+else
+    restoreFastaDefline.pl \
+	--inFasta updatedFasta.fa \
+	--mappingFile mapping.tsv \
+	--restoredFasta ${subsetFasta}.masked
 fi
 sed -i 1,2d ${subsetFasta}.out.gff
 cut -f 1,4,5 ${subsetFasta}.out.gff > rows
