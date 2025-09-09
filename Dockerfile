@@ -39,9 +39,9 @@ RUN wget https://github.com/Benson-Genomics-Lab/TRF/archive/v4.09.1.tar.gz \
     && ../configure && make && cp ./src/trf /opt/trf \
     && cd .. && rm -r build
 
-RUN wget http://www.repeatmasker.org/RepeatMasker/RepeatMasker-4.1.6.tar.gz \
-  && tar -zxvf RepeatMasker-4.1.6.tar.gz \
-  && rm RepeatMasker-4.1.6.tar.gz
+RUN wget http://www.repeatmasker.org/RepeatMasker/RepeatMasker-4.2.1.tar.gz \
+  && tar -zxvf RepeatMasker-4.2.1.tar.gz \
+  && rm RepeatMasker-4.2.1.tar.gz
 
 # Extract RMBlast
 RUN cd /opt \

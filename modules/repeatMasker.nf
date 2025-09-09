@@ -18,7 +18,7 @@ process runEDirect {
 }
 
 process findBestTaxonId {
-  container = 'veupathdb/repeatmasker:1.0.0'
+  container = 'veupathdb/repeatmasker:1.1.0'
   input:
     path taxonIds
 
@@ -40,7 +40,7 @@ process findBestTaxonId {
 }
 
 process runRepeatMasker {
-  container = 'veupathdb/repeatmasker:1.0.0'
+  container = 'veupathdb/repeatmasker:1.1.0'
   input:
     path subsetFasta
     val bestTaxon
@@ -54,7 +54,7 @@ process runRepeatMasker {
 }
 
 process cleanSequences {
- container = 'veupathdb/repeatmasker:1.0.0'
+ container = 'veupathdb/repeatmasker:1.1.0'
   input:
     path maskedFasta
     val trimDangling
