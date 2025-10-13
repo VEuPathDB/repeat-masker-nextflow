@@ -1,6 +1,25 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
+process getLineage {
+  container = 'veupathdb/repeatmasker:1.2.0'
+  input:
+    val taxonId
+
+  output:
+    env bestLineageId
+
+  script:
+    """
+    getLineage.pl --taxonId $taxonId --outFile max_id.txt
+    if [ ! -s "max_id.txt" ]; then
+      export bestLineageId=$taxonId
+    else
+      export bestLineageId=\$(cat max_id.txt)
+    fi
+    """
+}
+
 process runEDirect {
   container = 'veupathdb/edirect:1.0.0'
   input:
@@ -18,7 +37,7 @@ process runEDirect {
 }
 
 process findBestTaxonId {
-  container = 'veupathdb/repeatmasker:1.1.0'
+  container = 'veupathdb/repeatmasker:1.2.0'
   input:
     path taxonIds
 
@@ -40,7 +59,7 @@ process findBestTaxonId {
 }
 
 process runRepeatMasker {
-  container = 'veupathdb/repeatmasker:1.1.0'
+  container = 'veupathdb/repeatmasker:1.2.0'
   input:
     path subsetFasta
     val bestTaxon
@@ -54,7 +73,7 @@ process runRepeatMasker {
 }
 
 process cleanSequences {
- container = 'veupathdb/repeatmasker:1.1.0'
+ container = 'veupathdb/repeatmasker:1.2.0'
   input:
     path maskedFasta
     val trimDangling
@@ -94,8 +113,8 @@ workflow repeatMasker {
     seqs = Channel.fromPath(params.inputFilePath).flatMap { fraction = it.countFasta() / params.subsetFractionDenominator
                                                             it.splitFasta(by: fraction.toInteger(), file: true);
 							  }
-
-    taxonId = runEDirect(params.taxonId)
+    bestLineageId = getLineage(params.taxonId)
+    taxonId = runEDirect(bestLineageId)
     bestTaxon = findBestTaxonId(taxonId)
     masked = runRepeatMasker(seqs, bestTaxon)
 
