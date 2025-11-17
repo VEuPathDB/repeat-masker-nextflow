@@ -26,10 +26,18 @@ while (my $line = <MAP>) {
 }
 close MAP;
 
+open(SEQ, '<', $inFasta) || die "Could not open file $inFasta: $!";
 open(OUT, ">$restoredFasta") || die "Could not open outFile $restoredFasta";
 
-my $in  = Bio::SeqIO->new(-file => $inFasta, -format => 'Fasta');
-
-while ( my $seq = $in->next_seq() ) {
-    print OUT ">" . $deflineMap{$seq->primary_id} . "\n" . $seq->seq . "\n";    
+while (my $line = <SEQ>) {
+    chomp $line;
+    if ($line =~ /^>(\S+)/) {
+        print OUT ">$deflineMap{$1}\n";
+    }
+    else {
+        print OUT "$line\n";
+    }
 }
+
+close SEQ;
+close OUT;
