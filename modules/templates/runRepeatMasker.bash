@@ -6,7 +6,11 @@ updateDefline.pl \
         --mappingFile mapping.tsv \
         --newFasta updatedFasta.fa \
 
-RepeatMasker $params.rmParams -species $bestTaxon updatedFasta.fa -dir . -gff
+if [ "$bestTaxon" = "1" ]; then
+  RepeatMasker $params.rmParams updatedFasta.fa -dir . -gff
+else
+  RepeatMasker $params.rmParams -species $bestTaxon updatedFasta.fa -dir . -gff
+fi
 
 if [ ! -f updatedFasta.fa.masked ]; then
     mv $subsetFasta ${subsetFasta}.masked
