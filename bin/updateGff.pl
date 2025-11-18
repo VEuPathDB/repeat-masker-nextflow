@@ -30,7 +30,7 @@ while (my $line = <MAP>) {
 
 while (my $line = <$data>) {
     chomp $line;
-    if ($line =~ /^(\d+)(\tRepeatMasker.*)/) {	
+    if ($line =~ /^(fakeId_\d+)(\tRepeatMasker.*)/) {	
         print OUT "$deflineMap{$1}" . $2 . "\n";
     }
     else {

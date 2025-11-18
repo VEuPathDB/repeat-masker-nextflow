@@ -1,22 +1,22 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-
 process getLineage {
-  container = 'veupathdb/repeatmasker:1.3.0'
+  container = 'veupathdb/repeatmasker:1.4.0'
   input:
     val taxonId
 
   output:
-    env bestLineageId
+    env lowestLineageId
 
   script:
     """
-    getLineage.pl --taxonId $taxonId --outFile max_id.txt
-    if [ ! -s "max_id.txt" ]; then
-      export bestLineageId=$taxonId
+    famdb.py lineage -ad ${taxonId} > lineage.txt
+    getLineage.pl --inputFile lineage.txt --outFile lowest_id.txt
+    if [ ! -s "lowest_id.txt" ]; then
+      export lowestLineageId=$taxonId
     else
-      export bestLineageId=\$(cat max_id.txt)
+      export lowestLineageId=\$(cat lowest_id.txt)
     fi
     """
 }
@@ -24,21 +24,22 @@ process getLineage {
 process runEDirect {
   container = 'veupathdb/edirect:1.0.0'
   input:
-    val taxonId
+    val lowestLineageId
 
   output:
     path 'taxonIds.txt'
 
   script:
     """
-    efetch -db taxonomy -id $taxonId -format xml \
+    efetch -db taxonomy -id $lowestLineageId -format xml \
     | xtract -pattern Taxon -block LineageEx -sep "\n" -element TaxId > taxonIds.txt
-    echo "$taxonId" >> taxonIds.txt
+    # Adds our input id to the file, as it is not
+    echo "$lowestLineageId" >> taxonIds.txt
     """
 }
 
 process findBestTaxonId {
-  container = 'veupathdb/repeatmasker:1.3.0'
+  container = 'veupathdb/repeatmasker:1.4.0'
   input:
     path taxonIds
 
@@ -63,7 +64,7 @@ process findBestTaxonId {
 }
 
 process runRepeatMasker {
-  container = 'veupathdb/repeatmasker:1.3.0'
+  container = 'veupathdb/repeatmasker:1.4.0'
   input:
     path subsetFasta
     val bestTaxon
@@ -77,7 +78,7 @@ process runRepeatMasker {
 }
 
 process cleanSequences {
- container = 'veupathdb/repeatmasker:1.3.0'
+ container = 'veupathdb/repeatmasker:1.4.0'
   input:
     path maskedFasta
     val trimDangling
@@ -117,8 +118,8 @@ workflow repeatMasker {
     seqs = Channel.fromPath(params.inputFilePath).flatMap { fraction = it.countFasta() / params.subsetFractionDenominator
                                                             it.splitFasta(by: fraction.toInteger(), file: true);
 							  }
-    bestLineageId = getLineage(params.taxonId)
-    taxonId = runEDirect(bestLineageId)
+    lowestTaxonId = getLineage(params.taxonId)							  
+    taxonId = runEDirect(lowestTaxonId)
     bestTaxon = findBestTaxonId(taxonId)
     masked = runRepeatMasker(seqs, bestTaxon)
 

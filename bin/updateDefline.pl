@@ -16,9 +16,9 @@ open(OUT, ">$newFasta") || die "Could not open outFile $newFasta";
 
 my $in  = Bio::SeqIO->new(-file => $inFasta, -format => 'Fasta');
 
-my $counter = 0;
+my $counter = 1;
 while ( my $seq = $in->next_seq() ) {
-    print MAP "$counter\t" . $seq->primary_id . "\n";
-    print OUT ">$counter\n" . $seq->seq . "\n";
+    print MAP "fakeId_${counter}\t" . $seq->primary_id . "\n";
+    print OUT ">fakeId_${counter}\n" . $seq->seq . "\n";
     $counter += 1;
 }
