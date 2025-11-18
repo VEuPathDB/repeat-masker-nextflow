@@ -1,6 +1,26 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
+
+process getLineage {
+  container = 'veupathdb/repeatmasker:1.3.0'
+  input:
+    val taxonId
+
+  output:
+    env bestLineageId
+
+  script:
+    """
+    getLineage.pl --taxonId $taxonId --outFile max_id.txt
+    if [ ! -s "max_id.txt" ]; then
+      export bestLineageId=$taxonId
+    else
+      export bestLineageId=\$(cat max_id.txt)
+    fi
+    """
+}
+
 process runEDirect {
   container = 'veupathdb/edirect:1.0.0'
   input:
@@ -97,7 +117,8 @@ workflow repeatMasker {
     seqs = Channel.fromPath(params.inputFilePath).flatMap { fraction = it.countFasta() / params.subsetFractionDenominator
                                                             it.splitFasta(by: fraction.toInteger(), file: true);
 							  }
-    taxonId = runEDirect(params.taxonId)
+    bestLineageId = getLineage(params.taxonId)
+    taxonId = runEDirect(bestLineageId)
     bestTaxon = findBestTaxonId(taxonId)
     masked = runRepeatMasker(seqs, bestTaxon)
 
