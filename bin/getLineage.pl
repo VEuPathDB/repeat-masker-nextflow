@@ -43,7 +43,10 @@ foreach my $line (@lines) {
             taxid       => $taxid,
             bracket_num => $bracket_num,
         };
-    }    
+    }
+    else {
+        die "Improper file format found at line: $line\n";
+    }
 }
 
 # No entries found → output empty file
