@@ -30,17 +30,20 @@ foreach my $line (@lines) {
 
     # Count indentation level via leading spaces
     my ($spaces) = ($line =~ /^(\s*)/);
-    my $level = length($spaces);
-
+    
     # Extract taxonID and number of repeat families
-    # Plasmodium falciparum 3D7(16) [71]
-    if ($line =~ /^\s*(\S+)\s+.+\(\d+\)\s+\[(\d+)\]/) {
-        my ($taxid, $bracket_num) = ($1, $2);
-        push @{ $level_to_entries{$level} }, {
+    #1 root(0) [9]
+    #└─33630 Alveolata(16) [3]
+    #  └─5833 Plasmodium falciparum(16) [8]
+    #    └─36329 Plasmodium falciparum 3D7(16) [71]
+    if ($line =~ /^(\s*)[^\d]*?(\d+)\s.*\(\d+\)\s+\[(\d+)\]/) {
+        my ($spaces, $taxid, $bracket_num) = ($1, $2, $3);
+	my $level = length($spaces);
+	push @{ $level_to_entries{$level} }, {
             taxid       => $taxid,
             bracket_num => $bracket_num,
         };
-    }
+    }    
 }
 
 # No entries found → output empty file
@@ -58,9 +61,7 @@ my @deepest_entries = @{ $level_to_entries{$deepest} };
 my $best = (sort { $b->{bracket_num} <=> $a->{bracket_num} } @deepest_entries)[0];
 
 open(my $OUT, ">", $outFile) or die "Cannot write $outFile: $!";
-my $lowestId = $best->{taxid};
-$lowestId =~ s/^\D*//g;
-print $OUT "$lowestId\n";
+print $OUT $best->{taxid};
 close $OUT;
 
 exit 0;
