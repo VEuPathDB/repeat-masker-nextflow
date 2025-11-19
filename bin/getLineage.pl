@@ -24,6 +24,7 @@ if (!@lines) {
 
 my %level_to_entries;
 
+my $count = 0;
 foreach my $line (@lines) {
     chomp($line);
     next if $line =~ /^\s*$/;
@@ -43,17 +44,16 @@ foreach my $line (@lines) {
             taxid       => $taxid,
             bracket_num => $bracket_num,
         };
+	$count += 1;
     }
     else {
         die "Improper file format found at line: $line\n";
     }
 }
 
-# No entries found → output empty file
-if (!keys %level_to_entries) {
-    open(my $OUT, ">", $outFile) or die "Cannot write $outFile: $!";
-    close $OUT;
-    exit 0;
+# If famdb returned lines, but none were correctly formatted, fail
+if ($count == 0) {
+    die "No correctly formatted lines in file $inputFile\n";
 }
 
 # Deepest indentation = lowest taxon level
