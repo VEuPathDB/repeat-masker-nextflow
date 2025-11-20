@@ -74,6 +74,7 @@ process runRepeatMasker {
     path '*.bed', emit: bed
 
   script:
+    log.info "The bestTaxonId chosen was ${bestTaxon}"
     template 'runRepeatMasker.bash'
 }
 
