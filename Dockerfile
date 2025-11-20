@@ -50,11 +50,8 @@ RUN cd /opt \
     && tar --strip-components=1 -x -f rmblast-2.14.1+-x64-linux.tar.gz -C rmblast \
     && rm rmblast-2.14.1+-x64-linux.tar.gz
 
-COPY ./bin/seqCleaner.pl /usr/local/bin/seqCleaner.pl
 COPY ./bin/configure /opt/RepeatMasker/configure
 COPY ./bin/RepeatMaskerConfig.pm /opt/RepeatMasker/RepeatMaskerConfig.pm
-
-RUN chmod +x /usr/local/bin/seqCleaner.pl
 
 ENV PATH=/opt/:/opt/RepeatMasker/:/usr/bin/:$PATH
 
