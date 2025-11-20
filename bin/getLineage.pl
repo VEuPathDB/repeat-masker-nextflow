@@ -37,7 +37,7 @@ foreach my $line (@lines) {
     #└─33630 Alveolata(16) [3]
     #  └─5833 Plasmodium falciparum(16) [8]
     #    └─36329 Plasmodium falciparum 3D7(16) [71]
-    if ($line =~ /^(\s*)[^\d]*?(\d+)\s.*\(\d+\)\s+\[(\d+)\]/) {
+    if ($line =~ /^(\s*)[^\d]*(\d+)\s.*\(\d+\)\s+\[(\d+)\]/) {
         my ($spaces, $taxid, $bracket_num) = ($1, $2, $3);
 	my $level = length($spaces);
 	push @{ $level_to_entries{$level} }, {
