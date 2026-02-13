@@ -2,7 +2,7 @@
 nextflow.enable.dsl=2
 
 process getLineage {
-  container = 'veupathdb/repeatmasker:1.4.0'
+  container 'veupathdb/repeatmasker:1.4.0'
   input:
     val taxonId
 
@@ -22,7 +22,7 @@ process getLineage {
 }
 
 process runEDirect {
-  container = 'veupathdb/edirect:1.0.0'
+  container 'veupathdb/edirect:1.0.0'
   input:
     val lowestLineageId
 
@@ -39,7 +39,7 @@ process runEDirect {
 }
 
 process findBestTaxonId {
-  container = 'veupathdb/repeatmasker:1.4.0'
+  container 'veupathdb/repeatmasker:1.4.0'
   input:
     path taxonIds
 
@@ -64,7 +64,7 @@ process findBestTaxonId {
 }
 
 process runRepeatMasker {
-  container = 'veupathdb/repeatmasker:1.4.0'
+  container 'veupathdb/repeatmasker:1.4.0'
   input:
     path subsetFasta
     val bestTaxon
@@ -79,7 +79,7 @@ process runRepeatMasker {
 }
 
 process cleanSequences {
- container = 'veupathdb/repeatmasker:1.4.0'
+ container 'veupathdb/repeatmasker:1.4.0'
   input:
     path maskedFasta
     val trimDangling
@@ -93,7 +93,7 @@ process cleanSequences {
 }
 
 process indexResults {
-  container = 'biocontainers/tabix:v1.9-11-deb_cv1'
+  container 'biocontainers/tabix:v1.9-11-deb_cv1'
 
   input:
     path bed
