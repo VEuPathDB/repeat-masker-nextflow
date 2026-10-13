@@ -7,7 +7,7 @@ process getLineage {
     val taxonId
 
   output:
-    env lowestLineageId
+    env 'lowestLineageId'
 
   script:
     """
@@ -44,7 +44,7 @@ process findBestTaxonId {
     path taxonIds
 
   output:
-    env bestTaxon
+    env 'bestTaxon'
 
   script:
     """
@@ -116,7 +116,7 @@ workflow repeatMasker {
     inputFile
 
   main:
-    seqs = Channel.fromPath(params.inputFilePath).flatMap { fraction = it.countFasta() / params.subsetFractionDenominator
+    seqs = Channel.fromPath(params.inputFilePath).flatMap { def fraction = it.countFasta() / params.subsetFractionDenominator
                                                             it.splitFasta(by: fraction.toInteger(), file: true);
 							  }
     lowestTaxonId = getLineage(params.taxonId)							  
