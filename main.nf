@@ -5,14 +5,6 @@ nextflow.enable.dsl=2
 // Param Checking
 //--------------------------------------------------------------------------
 
-if(!params.subsetFractionDenominator) {
-  throw new Exception("Missing params.subsetFractionDenominator")
-}
-
-if(!params.inputFilePath) {
-  throw new Exception("Missing params.seqFile")  
-}
-
 //--------------------------------------------------------------------------
 // Includes
 //--------------------------------------------------------------------------
@@ -24,5 +16,13 @@ include { repeatMasker } from './modules/repeatMasker.nf'
 //--------------------------------------------------------------------------
 
 workflow {
+  if(!params.subsetFractionDenominator) {
+    error "Missing params.subsetFractionDenominator"
+  }
+
+  if(!params.inputFilePath) {
+    error "Missing params.seqFile"
+  }
+
   repeatMasker(params.inputFilePath)
 }
